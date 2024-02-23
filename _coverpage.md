@@ -7,4 +7,4 @@
 - 山重水复疑无路
 - 柳暗花明又一村
 
-[Get Started](ES6/)
+[Get Started](js/ES6/)
