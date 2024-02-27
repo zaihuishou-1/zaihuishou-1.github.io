@@ -14,33 +14,6 @@ console.log(obj[sym]); // value
 console.log(obj); // { a: 1, b: 2, c: 3 }
 ```
 
-## Promise.allSettled()
-
-- Promise.allSettled()方法返回一个在所有给定的 promise 已被解析或被拒绝后决议的 promise，并带有一个对象数组，每个对象表示对应的 promise 结果。
-
-```js
-const promises = [
-  Promise.resolve("resolved"),
-  Promise.reject("rejected"),
-  Promise.resolve("resolved"),
-];
-
-Promise.allSettled(promises)
-  .then((results) => {
-    console.log(results);
-  })
-  .catch((error) => {
-    console.error(error);
-  });
-
-// 输出结果:
-// [
-// { status: 'fulfilled', value: 'resolved' },
-// { status: 'rejected', reason: 'rejected' },
-// { status: 'fulfilled', value: 'resolved' }
-// ]
-```
-
 ## Object.entries()
 
 当使用 Object.entries()时，可以传入一个对象作为参数。例如：
@@ -133,9 +106,64 @@ const doubled = Array.from(nums, (num) => num * 2);
 console.log(doubled); // 输出: [2, 4, 6, 8, 10]
 ```
 
-## 实现 promise
+## Promise
 
-> ### 状态
+### promise 原理
+
+Promise 是 JavaScript 中处理异步操作的一种机制。它提供了一种更优雅和可靠的方式来处理异步代码，避免了回调地狱（callback hell）的问题。
+
+Promise 的原理可以简单概括为以下几点：
+
+1. Promise 是一个对象，它有三个状态：pending（进行中）、fulfilled（已成功）和 rejected（已失败）。
+
+2. Promise 对象通过 `new Promise()`构造函数创建，构造函数接受一个执行器函数作为参数，该执行器函数会立即执行。
+
+3. 执行器函数接受两个参数：`resolve` 和 `reject`。`resolve` 用于将 Promise 状态从 pending 变为 fulfilled，`reject` 用于将 Promise 状态从 pending 变为 rejected。
+
+4. Promise 对象具有 `then()`方法，用于注册回调函数，当 Promise 状态变为 fulfilled 时，会调用 `then()`方法中的成功回调函数；当 Promise 状态变为 rejected 时，会调用 `then()`方法中的失败回调函数。
+
+5. Promise 可以链式调用，通过 `then()`方法返回一个新的 Promise 对象，可以在后续的 `then()`方法中继续注册回调函数。
+
+6. Promise 可以通过 `catch()`方法捕获错误，`catch()`方法相当于 `then(null, onRejected)`，用于处理 Promise 链中的错误。
+
+7. Promise 可以通过 `finally()`方法注册一个回调函数，在 Promise 执行结束后无论成功或失败都会执行该回调函数。
+
+8. Promise 可以通过 `Promise.resolve()`和 `Promise.reject()`方法创建已经成功或失败的 Promise 对象。
+
+9. Promise 可以通过 `Promise.all()`和 `Promise.race()`方法对多个 Promise 对象进行处理。`Promise.all()`会等待所有 Promise 对象都成功后才返回结果，`Promise.race()`会返回最先解决的 Promise 对象的结果。
+
+总结起来，Promise 的原理就是通过状态的变化和回调函数的注册来处理异步操作，使得代码更加清晰和可读。它提供了一种更好的方式来处理异步代码，避免了回调地狱的问题，并且支持链式调用和错误处理。
+
+### Promise.allSettled()
+
+- Promise.allSettled()方法返回一个在所有给定的 promise 已被解析或被拒绝后决议的 promise，并带有一个对象数组，每个对象表示对应的 promise 结果。
+
+```js
+const promises = [
+  Promise.resolve("resolved"),
+  Promise.reject("rejected"),
+  Promise.resolve("resolved"),
+];
+
+Promise.allSettled(promises)
+  .then((results) => {
+    console.log(results);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+
+// 输出结果:
+// [
+// { status: 'fulfilled', value: 'resolved' },
+// { status: 'rejected', reason: 'rejected' },
+// { status: 'fulfilled', value: 'resolved' }
+// ]
+```
+
+### 实现 promise
+
+> #### 状态
 
 Promise 有三个状态，分别为：
 
@@ -154,7 +182,7 @@ function MyPromise(excutor) {
 }
 ```
 
-> ### 立即执行的函数
+> #### 立即执行的函数
 
 Promise 接收一个立即执行的函数（执行器：excutor），该函数接收两个回调函数，resolve(成功回调)与 reject(失败回调)。
 
@@ -199,7 +227,7 @@ function MyPromise(excutor) {
 }
 ```
 
-> ### then 方法
+> #### then 方法
 
 ```js
 new Promise((...) => {...}).then(res => {}, err => {})
@@ -295,7 +323,7 @@ function MyPromise(excutor) {
 }
 ```
 
-> ### reject 方法
+> #### reject 方法
 
 ```js
 MyPromise.reject(reason);
@@ -311,7 +339,7 @@ MyPromise.reject = function (reason) {
 };
 ```
 
-> ### resolve 方法
+> #### resolve 方法
 
 ```js
 MyPromise.resolve(value);
@@ -337,7 +365,7 @@ MyPromise.resolve = function (value) {
 };
 ```
 
-> ### all 方法
+> #### all 方法
 
 ```js
 MyPromise.all([promise1, promise2]).then(
