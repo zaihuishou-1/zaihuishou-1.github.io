@@ -419,3 +419,9 @@ MyPromise.all = function (promises) {
   });
 };
 ```
+
+## ECMA2023
+
+- Array 类三个新的实例方法： toSorted()、toSpliced()、toReversed()，解决了数组变异产生副作用的问题。
+
+- 现有的 sort、splice、reverse 方法都会直接修改原数组，新方法 toSorted()、toSpliced()、toReversed() 与原方法的功能基本一致，但不会修改原数组，直接返回一个新的数组。

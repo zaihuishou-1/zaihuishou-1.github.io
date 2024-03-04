@@ -40,3 +40,55 @@ objectFactory(构造函数, 初始化参数);
 > `for...in` 循环主要是为了遍历对象而生，不适用于遍历数组；
 
 > `for...of` 循环可以用来遍历数组、类数组对象，字符串、Set、Map 以及 Generator 对象。
+
+# 匿名函数
+
+- 1. 匿名函数作为函数表达式：
+
+```js
+const add = function (a, b) {
+  return a + b;
+};
+
+console.log(add(2, 3)); // 输出: 5
+```
+
+- 2. 匿名函数作为回调函数：
+
+```js
+const numbers = [1, 2, 3, 4, 5];
+
+numbers.forEach(function (number) {
+  console.log(number);
+});
+```
+
+- 3. 匿名函数作为立即执行函数：
+
+```js
+(function () {
+  console.log("这是一个立即执行的匿名函数");
+})();
+```
+
+- 4. 匿名函数作为事件处理函数：
+
+```js
+const button = document.querySelector("button");
+
+button.addEventListener("click", function () {
+  console.log("按钮被点击了");
+});
+```
+
+- 5. 匿名函数作为数组的映射函数：
+
+```js
+const numbers = [1, 2, 3, 4, 5];
+
+const doubledNumbers = numbers.map(function (number) {
+  return number * 2;
+});
+
+console.log(doubledNumbers); // 输出: [2, 4, 6, 8, 10]
+```
