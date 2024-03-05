@@ -1,4 +1,4 @@
-<h3>js</h3>
+<h3>javascript</h3>
 
 - [ES6](js/ES6/ "测试页面title")
 - [数据类型](js/dataType/)
@@ -10,6 +10,10 @@
 - [设计模式](js/designPatterns/)
 
 - [常见知识点](js/general/)
+
+<h3>typescript</h3>
+
+- [typescript](ts/)
 
 <h3>浏览器机制</h3>
 
