@@ -109,3 +109,21 @@ fun1.bind({ id: "Obj" })(); // 'Global'
 **7. 箭头函数没有 prototype**
 
 **8. 箭头函数不能用作 Generator 函数，不能使用 yeild 关键字**
+
+## 常见题目
+
+```js
+const obj = {
+  name: "xiaoqiang",
+  sayHi1: () => {
+    console.log(this.name);
+  },
+  sayHi2() {
+    (() => {
+      console.log(this.name);
+    })();
+  },
+};
+obj.sayHi1(); // ''
+obj.sayHi2(); // xiaoqiang
+```

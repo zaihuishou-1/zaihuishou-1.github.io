@@ -19,10 +19,17 @@
 
 - [浏览器](browser/)
 
-<h3>思考总结</h3>
-
-- [优雅地使用 if else](summary/20240301/)
-
 <h3>vue</h3>
 
 - [vue3](vue3/README.md)
+
+<h3>常见算法</h3>
+
+- [排序](algorithm/sort.md)
+
+<h3>思考总结</h3>
+
+- [vite](summary/20240101/)
+- [优雅地使用 if else](summary/20240301/)
+- [大文件分片上传](summary/20240330/)
+- [focus-within](summary/20240331/)
