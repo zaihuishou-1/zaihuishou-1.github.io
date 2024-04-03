@@ -2,29 +2,27 @@
 
 **new 操作符的执行过程：**
 
-1. 首先创建了一个新的空对象
-2. 设置原型，将对象的原型设置为函数的 prototype 对象。
-3. 让函数的 this 指向这个对象，执行构造函数的代码（为这个新对象添加属性）
-4. 判断函数的返回值类型，如果是值类型，返回创建的对象。如果是引用类型，就返回这个引用类型的对象。
-   具体实现：
-
 ```js
-function objectFactory() {
-  let newObject = null;
-  let constructor = Array.prototype.shift.call(arguments);
-  let result = null; // 判断参数是否是一个函数
-  if (typeof constructor !== "function") {
-    console.error("type error");
-    return;
-  } // 新建一个空对象，对象的原型为构造函数的 prototype 对象
-  newObject = Object.create(constructor.prototype); // 将 this 指向新建对象，并执行函数
-  result = constructor.apply(newObject, arguments); // 判断返回对象
-  let flag =
-    result && (typeof result === "object" || typeof result === "function"); // 判断返回结果
-  return flag ? result : newObject;
+function newFun(Fun, ...args) {
+  // 1.先创建一个空对象
+  let newObj = {};
+  // 2.把空对象和构造函数通过原型链进行链接
+  newObj.__proto__ = Fun.prototype;
+  // 3.把构造函数的this绑定到新的空对象身上
+  const result = Fun.apply(newObj, args);
+  // 4.根据构建函数返回的类型判断，如果是值类型，则返回对象，如果是引用类型，就要返回这个引用类型
+  return result instanceof Object ? result : newObj;
 }
-// 使用方法
-objectFactory(构造函数, 初始化参数);
+
+function Person(name) {
+  this.name = name;
+}
+Person.prototype.say = function () {
+  console.log("123456");
+};
+const p1 = newFun(Person, "张三");
+p1.say();
+console.log(p1);
 ```
 
 # for in 和 for of
@@ -92,3 +90,43 @@ const doubledNumbers = numbers.map(function (number) {
 
 console.log(doubledNumbers); // 输出: [2, 4, 6, 8, 10]
 ```
+
+# 精灵图和 base64 的区别
+
+- 精灵图：把多张小图整合到一张大图上，利用定位的一些属性把小图显示在页面上，当访问页面可以减少请求，提高加载的速度。
+
+- base64：传输 8Bit 字节代码的编码方式，把原本二进制形式转换为 64 个字符的单位，最后组成字符串。
+
+- base64 是会和 HTML、CSS 一起下载到浏览器中，减少请求，减少跨域问题，但是一些低版本不支持，若 base64 体积比原图片大，不利于 CSS 的加载。
+
+# setTimeout 的最小执行时间
+
+HTML5 规定：
+
+- setTimeout 最小执行时间是 4ms。
+
+- setInterval 最小执行时间是 10ms，小于 10ms 它会自动调整为 10ms。
+
+# mvvm 和 mvc
+
+**1、通信方向：**
+
+- MVVM 中的通信是双向的，这意味着视图（View）和模型（Model）之间的数据绑定是双向的，数据变化可以自动同步。
+- 相比之下，MVC 中的通信是单向的，通常需要控制器（Controller）来处理用户输入并更新模型，然后由模型通知视图更新。
+
+**2、数据绑定与视图更新：**
+
+- MVVM 通过双向数据绑定机制实现了视图和视图模型之间的自动更新，减少了手动处理数据更新的代码量，提高了开发效率。
+- 在 MVC 中，视图更新通常需要手动进行，这可能导致代码复杂度增加，且难以进行单元测试和自动化测试。
+
+**3、性能优化：**
+
+- MVVM 通过使用虚拟 DOM 来减少过度渲染，提高性能，特别是在数据频繁更新的情况下。
+- MVC 可能会因为大量的 DOM 操作而导致页面渲染性能降低，影响用户体验。
+
+**4、适用场景：**
+
+- MVVM 更适合于具有复杂数据绑定和交互逻辑的应用程序，如单页应用（SPA）和现代前端框架（如 Angular, Vue.js）。
+- MVC 则更适合于简单和较小规模的应用程序，以及后端开发思想的应用场景。
+
+总结来说，MVVM 和 MVC 各有其优势和适用场景。MVVM 提供了更高效的双向数据绑定和视图更新机制，适合于复杂的前端应用，而 MVC 则因其单向通信和数据处理的简洁性，适用于规模较小或后端开发思想的项目。

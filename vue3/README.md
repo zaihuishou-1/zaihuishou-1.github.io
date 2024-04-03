@@ -68,10 +68,11 @@ const Foo = defineAsyncComponent(() => import("./Foo.vue"));
 
 # vue2 和 vue3 核心 diff 算法区别？
 
-1. Vue 2.x 使用的是双向指针遍历的算法，也就是通过逐层比对新旧虚拟 DOM 树节点的方式来计算出更新需要做的最小操作集合。但这种算法的缺点是，由于遍历是从左到右、从上到下进行的，当发生节点删除或移动时，会导致其它节点位置的计算出现错误，因此会造成大量无效的重新渲染。
+- Vue 2 的 patch 函数是对新旧两棵树进行逐层比对，而 Vue 3 的 patch 函数则是基于 块追踪(Block tree) 进行比对。
 
-2. Vue 3.x 使用了经过优化的单向遍历算法，也就是只扫描新虚拟 DOM 树上的节点，判断是否需要更新，跳过不需要更新的节点，进一步减少了不必要的操作。此外，在虚拟 DOM 创建后，Vue 3 会缓存虚拟 DOM 节点的描述信息，以便于复用，这也会带来性能上的优势。同时，Vue 3 还引入了静态提升技术，在编译时将一些静态的节点及其子节点预先处理成 HTML 字符串，大大提升了渲染性能。
-   因此，总体来说，Vue 3 相对于 Vue 2 拥有更高效、更智能的 diff 算法，能够更好地避免不必要的操作，并提高了渲染性能。
+- Vue 3 中的 patch flag 会根据节点类型和属性的变化情况生成相应的比对标记。
+
+- Vue 3 中的 diff 算法会更加注重元素阶层的复用，而不是单纯地通过 key 来确定节点的复用。
 
 # Vue3 为什么比 Vue2 快
 
@@ -414,3 +415,52 @@ export default {
 ```
 
 > 选择哪种方式取决于具体场景和项目结构。通常推荐使用 provide 和 inject 或者 globalProperties，因为这些方法更符合 Vue 3 的响应式和组合式 API 的原则。
+
+# 打包优化
+
+**使用生产环境模式**
+
+在`vue-cli`创建的项目中，可以通过设置环境变量 `NODE_ENV` 为 `production` 来开启生产环境模式。
+
+这会启用 Webpack 的默认优化配置，包括代码压缩、作用域提升、去除无用代码等。生产模式下生成的输出文件是经过优化的，体积更小，加载速度更快。
+
+**按需加载（Lazy loading）**
+
+延迟加载非必须的模块，减少初始加载的文件体积。可以使用 Webpack 提供的动态 import()语法或使用@babel/plugin-syntax-dynamic-import 插件来实现按需加载
+
+**优化 Loader 配置**
+合理配置 Loader 来减少对文件的处理时间，提升打包速度。可以使用 thread-loader 将 Loader 的执行转移到 Worker 池中，使用 cache-loader 缓存 Loader 的执行结果等。
+
+**压缩 JavaScript：**
+
+使用 UglifyJS 或 Terser 插件来压缩你的 JavaScript 代码。
+
+**优化 CSS：**
+
+使用 purgecss-webpack 插件移除未使用的 CSS。
+
+**使用 CDNs：**
+
+将依赖项的链接指向 CDNs，以减少首屏加载时间。
+
+**利用缓存：**
+
+使用 cache-loader 在 Webpack 中对文件进行缓存。
+
+**图片优化：**
+
+使用 image-webpack-loader 来优化图片大小。
+
+**使用 Web Workers：**
+
+对于大型计算任务，可以使用 Web Workers 来避免阻塞主线程。
+
+**使用 SSR（服务器端渲染）：**
+
+对于一些静态组件，可以使用服务器端渲染来减少首屏加载时间。
+
+**使用 Webpack 的 externals：**
+
+将一些库通过 CDN 引入，而不是打包到 bundle 中。
+
+以上是一些基本的 Vue 打包优化策略，具体应用时需要根据项目实际情况进行调整。
