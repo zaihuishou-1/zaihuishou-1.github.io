@@ -130,3 +130,88 @@ HTML5 规定：
 - MVC 则更适合于简单和较小规模的应用程序，以及后端开发思想的应用场景。
 
 总结来说，MVVM 和 MVC 各有其优势和适用场景。MVVM 提供了更高效的双向数据绑定和视图更新机制，适合于复杂的前端应用，而 MVC 则因其单向通信和数据处理的简洁性，适用于规模较小或后端开发思想的项目。
+
+# 深拷贝
+
+> 递归方式(推荐使用)
+
+```js
+// 函数拷贝
+const copyObj = (obj = {}) => {
+  let newObj = null;
+  // 判断是否需要继续进行递归
+  if (typeof obj == "object" && obj !== null) {
+    newObj = obj instanceof Array ? [] : {};
+    // 进行下一层递归克隆
+    for (let i in obj) {
+      newObj[i] = copyObj(obj[i]);
+    }
+  } else {
+    newObj = obj;
+  }
+  return newObj;
+};
+
+let obj = {
+  numberParams: 1,
+  funcParams: () => {
+    console.log("I am a function!");
+  },
+  objParams: {
+    prop1: 1,
+    prop2: 2,
+  },
+};
+
+const newObj = copyObj(obj);
+obj.numberParams = 100; // 更改原对象的属性
+console.log(newObj.numberParams); // 输出1
+```
+
+> JSON.stringify()；(深拷贝普通对象时推荐使用)
+
+```js
+let obj = {
+  name: "张三",
+  age: 18,
+};
+
+// 先转为json格式字符串，再转回来
+let newObj = JSON.parse(JSON.stringify(obj));
+
+obj.age = 20;
+console.log(newObj.age); // 输出18
+```
+
+> 第三方库 lodash 的 cloneDeep()方法
+
+```js
+import lodash from "lodash";
+let obj = {
+  person: {
+    name: "张三",
+    age: 18,
+    hobbies: ["跑步", "乒乓球", "爬山"],
+  },
+  p: 1,
+};
+const newObj = lodash.cloneDeep(obj);
+obj.p = 20;
+console.log(newObj.p); // 输出1
+```
+
+> JQuery 的 extend()方法(推荐在 JQ 中使用)
+
+```js
+let obj = {
+  person: {
+    name: "张三",
+    age: 18,
+    hobbies: ["跑步", "乒乓球", "爬山"],
+  },
+  p: 1,
+};
+const newObj = $.extend(true, {}, obj);
+obj.p = 20;
+console.log(newObj.p); // 输出1
+```

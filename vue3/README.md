@@ -464,3 +464,24 @@ export default {
 将一些库通过 CDN 引入，而不是打包到 bundle 中。
 
 以上是一些基本的 Vue 打包优化策略，具体应用时需要根据项目实际情况进行调整。
+
+# vue3 实现 v-model
+
+**父组件**
+
+```ts
+<child v-model="showDevice"></child>;
+
+const showDevice = ref("");
+```
+
+**子组件**
+
+```ts
+<input :value="content" @input="inputChange"></input>;
+
+const content = defineModel({ type: String });
+const inputChange = (e) => {
+  content.value = e.target.value;
+};
+```
