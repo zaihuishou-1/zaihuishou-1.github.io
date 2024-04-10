@@ -10,6 +10,32 @@ ES5 中新增了一个 Object.getPrototypeOf() 方法，可以通过这个方法
 
 特点： JavaScript 对象是通过引用来传递的，创建的每个新对象实体中并没有一份属于自己的原型副本。当修改原型时，与之相关的对象也会继承这一改变。
 
+```js
+function Foo() {
+  Foo.a = function () {
+    console.log(1);
+  };
+  this.a = function () {
+    console.log(2);
+  };
+}
+
+Foo.prototype.a = function () {
+  console.log(3);
+};
+
+Foo.a = function () {
+  console.log(4);
+};
+
+Foo.a();
+const obj = new Foo();
+obj.a();
+Foo.a();
+
+// 输出 4 2 1
+```
+
 ## 原型修改、重写
 
 ```js

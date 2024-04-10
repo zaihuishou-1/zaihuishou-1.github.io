@@ -17,6 +17,45 @@ console.log("script end");
 // 输出顺序：script start -> async1 start -> async2 -> script end -> async1 end
 ```
 
+```js
+async function async1() {
+  console.log("async start"); // 2
+  await async2();
+  console.log("async1 end"); // 6
+}
+
+async function async2() {
+  console.log("async2"); // 3
+}
+
+console.log("script start"); // 1
+
+setTimeout(function () {
+  console.log("setTimeout1"); // 8
+  new Promise(function (resolve) {
+    console.log("promise3"); // 9
+    resolve();
+  }).then(function () {
+    console.log("promise4"); // 10
+  });
+}, 0);
+
+setTimeout(() => {
+  console.log("setTimeout2"); // 11
+}, 0);
+
+async1();
+
+new Promise(function (resolve) {
+  console.log("promise1"); // 4
+  resolve();
+}).then(function () {
+  console.log("promise2"); // 7
+});
+
+console.log("script end"); // 5
+```
+
 ---
 
 ```js

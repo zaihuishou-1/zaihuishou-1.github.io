@@ -1,30 +1,3 @@
-## new 操作符的实现原理
-
-**new 操作符的执行过程：**
-
-```js
-function newFun(Fun, ...args) {
-  // 1.先创建一个空对象
-  let newObj = {};
-  // 2.把空对象和构造函数通过原型链进行链接
-  newObj.__proto__ = Fun.prototype;
-  // 3.把构造函数的this绑定到新的空对象身上
-  const result = Fun.apply(newObj, args);
-  // 4.根据构建函数返回的类型判断，如果是值类型，则返回对象，如果是引用类型，就要返回这个引用类型
-  return result instanceof Object ? result : newObj;
-}
-
-function Person(name) {
-  this.name = name;
-}
-Person.prototype.say = function () {
-  console.log("123456");
-};
-const p1 = newFun(Person, "张三");
-p1.say();
-console.log(p1);
-```
-
 # for in 和 for of
 
 `for…of` 是 ES6 新增的遍历方式，允许遍历一个含有 iterator 接口的数据结构（数组、对象等）并且返回各项的值，和 ES3 中的`for…in`的区别如下
